@@ -43,7 +43,7 @@ public class JsonWx {
 	static double gust;
 	
 	static String callSign="VK2CPR-13";
-	static int passCode=00000;		//aprs password	
+	static int passCode=18360;		//aprs password	
 	static String icon; //the aprs icon number corresponding to severity 0-5
 	static String humanReadable; //low medium high etc
 		
