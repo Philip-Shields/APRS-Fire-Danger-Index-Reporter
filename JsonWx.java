@@ -28,14 +28,23 @@ import com.google.gson.GsonBuilder;
 
 
  /**
-   JsonWx is a program that reads the JSON stream from BOM and calculates the fire danger index,
-   last time rain and places the info on aprs.fi for a town.
-   JsonWx  Copyright (C) 2019  Philip Shields.
+   JsonWx is a program that reads the JSON stream from BOM and calculates the 
+   possible fire danger index,last time rain and places the info on aprs.fi for 
+   a town. The application is basically a fun experiment and its outputs including 
+   the fire danger rating are experimental and are not intended to be relied on for 
+   human, animal or property safety. Your official fire department notices are for that.
+   JsonWx  Copyright (C) 2019  Philip Shields: shields_phil@yahoo.com.au.
+   
       
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
+    (at your option) any later version. 
+    This application is basically a fun experiment and its outputs including
+    the fire danger rating are experimental and are not intended to be relied 
+    on for human, animal or property safety. Your official fire department 
+    notices are for that.
+   JsonWx  Copyright (C) 2019  Philip Shields: shields_phil@yahoo.com.au.
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
