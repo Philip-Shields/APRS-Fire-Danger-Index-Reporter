@@ -27,8 +27,49 @@ import com.google.gson.GsonBuilder;
 
 
 
+ /**
+   JsonWx is a program that reads the JSON stream from BOM and calculates the fire danger index,
+   last time rain and places the info on aprs.fi for a town.
+   JsonWx  Copyright (C) 2019  Philip Shields.
+      
+    This program is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    This program is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with this program.  If not, see <https://www.gnu.org/licenses/>.
+    
+ */
 
 public class JsonWx {
+	
+	//variables that may come from a gui
+	static String callSign="VK2xxx-13";
+	static int passCode=00000;		//aprs password	
+	static String townURL="http://www.bom.gov.au/fwo/IDN60801/IDN60801.95896.json"; //Albury nsw
+	static String serverName="aunz.aprs2.net";
+	static int port=14580;
+	/**Keetch Byram Drought Index (BKDI) provides an estimate of soil dryness (moisture deficiency). 
+	 * The number indicates the amount of rainfall in mm that would be required to reduce the index to zero or saturation. 
+	 * The meanings of the various KBDI ranges are as follows:
+	\95 0 \96 24mm Mild
+	\95 25 \96 62mm Average
+	\95 63 \96 100mm Serious
+	\95 101 \96 200mm Extreme */	
+	static double BKDI = 60;
+	static int grassCuring=80; //grass curing 1 to 100%	
+	//external documents, change to your file locations	
+	static String fileTelem = new File("C:\\java\\JsonWx\\telemNumber.txt").getAbsolutePath();//incremental aprs telemetry beacon
+	static String fileLastRain = new File("C:\\java\\JsonWx\\lastRainAlbury.txt").getAbsolutePath();//last rain
+	static String weatherNow = new File("Z:\\wxnow.txt").getAbsolutePath(); //cumulus weather file
+	
+	//variables needed by calulations, beacons and file writing
 	static float fireRating; //FDI     	
 	static double windSpeed;
 	static double humidity;
@@ -40,29 +81,21 @@ public class JsonWx {
 	static long fuelMoisture;
 	static Date weatherNowDate;
 	static double qnh;
-	static double gust;
-	
-	static String callSign="VK2CPR-13";
-	static int passCode=00000;		//aprs password	
+	static double gust;	
 	static String icon; //the aprs icon number corresponding to severity 0-5
 	static String humanReadable; //low medium high etc
-		
-	static String townURL="http://www.bom.gov.au/fwo/IDN60801/IDN60801.95896.json"; //Albury nsw 
+	static int i;//aprs telemetry number
+	static String last; //last weather date	
+	 
 	
 	//String serverName="second.aprs.net";
 	//int port = 20157;
 	//String serverName="rotate.aprs.net.au"; 
-	static String serverName="aunz.aprs2.net";
-	static int port=14580;
-	static int i;//aprs telemetry number
-	static String last; //last weather date
+	
+	
 	//int port=14501;
 	
-	//external documents
 	
-	static String fileTelem = new File("C:\\java\\JsonWx\\telemNumber.txt").getAbsolutePath();//incremental aprs telemetry beacon
-	static String fileLastRain = new File("C:\\java\\JsonWx\\lastRainAlbury.txt").getAbsolutePath();//last rain
-	static String weatherNow = new File("Z:\\wxnow.txt").getAbsolutePath(); //cumulus weather file
 	
 	public static void main(String[] args) throws IOException {
 		
@@ -73,11 +106,7 @@ public class JsonWx {
     }
 	
 	public static void JsonFromBom() throws IOException{
-		// Gson gson = new GsonBuilder().enableComplexMapKeySerialization()
-        //.setPrettyPrinting().serializeNulls().create();
-
-
-
+		
 //constructors
 	Gson gson = new GsonBuilder().serializeNulls().create();
 	TownWx townWx = new TownWx();        
@@ -148,7 +177,8 @@ public class JsonWx {
     	
     	System.out.println("Consecutive dry days= "+ChronoUnit.DAYS.between(lastRain,dateNow));
     	consecutiveDryDays= ChronoUnit.DAYS.between(lastRain,dateNow);
-    	double fireRating=Algorithms(windSpeed, humidity, airTemp, rain, consecutiveDryDays);
+    	
+    	double fireRating=Algorithms(windSpeed, humidity, airTemp, rain, consecutiveDryDays, BKDI, grassCuring);
     	
     	System.out.println("Fire rating= "+fireRating);
 	}
@@ -545,26 +575,19 @@ public class JsonWx {
 	}
 	
 	//algorithms that calculate the fire danger
-	public static double Algorithms (double windSpeed, double humidity, double airTemp, String rain, double consecutiveDryDays){
+	public static double Algorithms (double windSpeed, double humidity, double airTemp, String rain, double consecutiveDryDays, 
+			double bkdi, int grasscuring){
 		
-		int grassCuring=80; //grass curing 1 to 100%
+		
 		double rainValue = Double.parseDouble(rain);
-		/**Keetch Byram Drought Index (BKDI) provides an estimate of soil dryness (moisture deficiency). 
-		 * The number indicates the amount of rainfall in mm that would be required to reduce the index to zero or saturation. 
-		 * The meanings of the various KBDI ranges are as follows:
-		\95 0 \96 24mm Mild
-		\95 25 \96 62mm Average
-		\95 63 \96 100mm Serious
-		\95 101 \96 200mm Extreme */
 		
-		double BKDI = 60;
 		
 		//Calculate Drought Factor
-		double droughtFactor = Math.round(Math.pow(0.191*(BKDI+104)*(consecutiveDryDays+1),1.5)/(Math.pow(3.52*(consecutiveDryDays+1),1.5)+rainValue-1)); 
+		double droughtFactor = Math.round(Math.pow(0.191*(bkdi+104)*(consecutiveDryDays+1),1.5)/(Math.pow(3.52*(consecutiveDryDays+1),1.5)+rainValue-1)); 
 		if (droughtFactor>10)droughtFactor = 10;
 		
 		//Fuel moisture content
-		fuelMoisture=Math.round(((97.7+(4.06*humidity))/(airTemp+6))-(0.00854*humidity)+(3000/grassCuring)-30); 
+		fuelMoisture=Math.round(((97.7+(4.06*humidity))/(airTemp+6))-(0.00854*humidity)+(3000/grasscuring)-30); 
 		
 		//Fire rating
 		//fireRating= ((3 * Math.round((Math.exp ((.987 *Math.log(DF + 0.001)) - .45 - (.0345 * Humid)+ (.0338 *Temp)+ (.0234 * WindNow))))));
