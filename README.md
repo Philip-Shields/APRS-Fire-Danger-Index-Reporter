@@ -17,4 +17,4 @@ The application is basically a fun experiment and its outputs including the fire
 are not intended to be relied on for human, animal or property safety. 
 Your official fire department notices are for that.
 cheers and 73,
-Phil VK2CPR 
+Phil 
