@@ -13,7 +13,8 @@ lastRainRecorded.txt
 wxnow.txt a file that Cumulus normally generates, I don't use Cumulus any more. This application generates it 
 and it is read by UI-VIEW32 and transmitted as a weather beacon on 2 meters.
 Complile and run the application. Someone may write a gui for it someday. 
-The application is basically a fun experiment and is not intended to be relied on for human safety. Your official
-fire department notices are for that.
+The application is basically a fun experiment and its outputs including the fire danger rating are experimental and 
+are not intended to be relied on for human, animal or property safety. 
+Your official fire department notices are for that.
 cheers and 73,
 Phil VK2CPR shields_phil@yahoo.com.au
