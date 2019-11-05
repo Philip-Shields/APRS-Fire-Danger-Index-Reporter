@@ -1,7 +1,7 @@
 # APRS-Fire-Danger-Index-Reporter
 A Java APRS fire danger reporter that gets its information from the Australian BOM JSON stream
 This stand alone java application reads the JSON stream from the BOM for a particular town. It 
-calculates the fire danger in real time and puts an icon on the aprs.fi map.
+calculates the possible fire danger in real time and puts an icon on the aprs.fi map.
 You have to supply your call sign, your aprs pass code, coordinates for the icon on the aprs.fi map 
 and the url to your town eg:
 http://www.bom.gov.au/fwo/IDN60801/IDN60801.95896.json (for the town of Albury in this example).
