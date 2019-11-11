@@ -53,13 +53,13 @@ import com.google.gson.GsonBuilder;
 public class JsonWx {
 	
 	//variables that may come from a gui
-	static String callSign="VK2CPR-13";
-	static int passCode=18360;		//aprs password	
+	static String callSign="VK2xxx-13";
+	static int passCode=00000;		//aprs password	
 	static String townURL="http://www.bom.gov.au/fwo/IDN60801/IDN60801.95896.json"; //Albury nsw
 	static String serverName="aunz.aprs2.net";
 	static int port=14580;
 	static String coordinatesOfIcon="3614.16S/14642.03E"; //where the icon is to appear on aprs.fi map
-	static String iconName="FireDangr"; //icon name are 9 characters max and be your callsign
+	static String iconName="VK2xxx"; //icon name are 9 characters max and may be your callsign
 	/**Keetch Byram Drought Index (BKDI) provides an estimate of soil dryness (moisture deficiency). 
 	 * The number indicates the amount of rainfall in mm that would be required to reduce the index to zero or saturation. 
 	 * The meanings of the various KBDI ranges are as follows:
