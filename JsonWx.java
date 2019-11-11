@@ -30,21 +30,15 @@ import com.google.gson.GsonBuilder;
  /**
    JsonWx is a program that reads the JSON stream from BOM and calculates the 
    possible fire danger index,last time rain and places the info on aprs.fi for 
-   a town. The application is basically a fun experiment and its outputs including 
+   a town. This application is basically a fun experiment and its outputs including 
    the fire danger rating are experimental and are not intended to be relied on for 
    human, animal or property safety. Your official fire department notices are for that.
    JsonWx  Copyright (C) 2019  Philip Shields: shields_phil@yahoo.com.au.
-   
       
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by
     the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version. 
-    This application is basically a fun experiment and its outputs including
-    the fire danger rating are experimental and are not intended to be relied 
-    on for human, animal or property safety. Your official fire department 
-    notices are for that.
-   JsonWx  Copyright (C) 2019  Philip Shields: shields_phil@yahoo.com.au.
+    (at your option) any later version.
 
     This program is distributed in the hope that it will be useful,
     but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -59,12 +53,13 @@ import com.google.gson.GsonBuilder;
 public class JsonWx {
 	
 	//variables that may come from a gui
-	static String callSign="VK2xxx-13";
-	static int passCode=00000;		//your aprs password	
+	static String callSign="VK2CPR-13";
+	static int passCode=18360;		//aprs password	
 	static String townURL="http://www.bom.gov.au/fwo/IDN60801/IDN60801.95896.json"; //Albury nsw
 	static String serverName="aunz.aprs2.net";
 	static int port=14580;
-	static String coordinatesOfIcon="0000.00S/00000.00E"; //where the icon is to appear on aprs.fi map
+	static String coordinatesOfIcon="3614.16S/14642.03E"; //where the icon is to appear on aprs.fi map
+	static String iconName="FireDangr"; //icon name are 9 characters max and be your callsign
 	/**Keetch Byram Drought Index (BKDI) provides an estimate of soil dryness (moisture deficiency). 
 	 * The number indicates the amount of rainfall in mm that would be required to reduce the index to zero or saturation. 
 	 * The meanings of the various KBDI ranges are as follows:
@@ -695,9 +690,9 @@ public class JsonWx {
 
 			String logOn="user "+ callSign+" pass "+passCode+" ver \"manual login\"";
 			//object beacon
-			String object="FireDangr>APRS,TCPIP*:!"+coordinatesOfIcon+icon+Math.round(consecutiveDryDays)+" days since it last rained. FDI="+Math.round(fireRating)+"/100; which is "+humanReadable;
+			String object=iconName+">APRS,TCPIP*:!"+coordinatesOfIcon+icon+Math.round(consecutiveDryDays)+" days since it last rained. FDI="+Math.round(fireRating)+"/100; which is "+humanReadable;
 		
-			String telem="FireDangr>APRS,TCPIP*:T#"+TelemetryBeaconNumberReader()+","+Math.round(fireRating)+","+windSpeed+","+airTemp+","+fuelMoisture+","+forwardTravel+",";
+			String telem=iconName+">APRS,TCPIP*:T#"+TelemetryBeaconNumberReader()+","+Math.round(fireRating)+","+windSpeed+","+airTemp+","+fuelMoisture+","+forwardTravel+",";
 		//send the beacons down the pipe
 
 		System.out.println("Connecting to: " + serverName + " on port: " + port);
