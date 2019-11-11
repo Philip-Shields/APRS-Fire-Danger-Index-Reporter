@@ -53,13 +53,13 @@ import com.google.gson.GsonBuilder;
 public class JsonWx {
 	
 	//variables that may come from a gui
-	static String callSign="VK2xxx-13";
-	static int passCode=00000;		//aprs password	
-	static String townURL="http://www.bom.gov.au/fwo/IDN60801/IDN60801.95896.json"; //Albury nsw
-	static String serverName="aunz.aprs2.net";
+	static String callSign="VK2xxx-13"; //your callsign
+	static int passCode=00000;		//your aprs password	
+	static String townURL="http://www.bom.gov.au/fwo/IDN60801/IDN60801.95896.json"; // change to your closest BOM weather station..Albury nsw in this example
+	static String serverName="aunz.aprs2.net"; //aprs server
 	static int port=14580;
-	static String coordinatesOfIcon="3614.16S/14642.03E"; //where the icon is to appear on aprs.fi map
-	static String iconName="VK2xxx"; //icon name are 9 characters max and may be your callsign
+	static String coordinatesOfIcon="0000.00S/00000.00E"; // aprs coordinate system where the icon is to appear on aprs.fi map
+	static String iconName="VK2xxx"; //icon name is 9 characters max and can be different to your callsign but probably best to be your callsign
 	/**Keetch Byram Drought Index (BKDI) provides an estimate of soil dryness (moisture deficiency). 
 	 * The number indicates the amount of rainfall in mm that would be required to reduce the index to zero or saturation. 
 	 * The meanings of the various KBDI ranges are as follows:
@@ -69,7 +69,7 @@ public class JsonWx {
 	\95 101 \96 200mm Extreme */	
 	static double BKDI = 60;
 	static int grassCuring=80; //grass curing 1 to 100%	
-	//external documents, change to your file locations	
+	//external documents, change to your file locations	adjust to your own locations
 	static String fileTelem = new File("C:\\java\\JsonWx\\telemNumber.txt").getAbsolutePath();//incremental aprs telemetry beacon
 	static String fileLastRain = new File("C:\\java\\JsonWx\\lastRainAlbury.txt").getAbsolutePath();//last rain
 	static String weatherNow = new File("Z:\\wxnow.txt").getAbsolutePath(); //cumulus weather file
